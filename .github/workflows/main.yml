@@ -1,0 +1,42 @@
+name: Hotstar clone
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+
+# ================= BUILD JOB =================
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Maven Validate
+        run: mvn validate
+
+      - name: Maven Compile
+        run: mvn compile
+
+      - name: Maven Test
+        run: mvn test
+
+      - name: Maven Package
+        run: mvn package
+
+      - name: Upload WAR Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: war-file
+          path: target/*.war
+
